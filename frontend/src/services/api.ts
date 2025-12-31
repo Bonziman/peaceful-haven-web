@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { config } from '../config';
+import { config } from '../config'; // Assuming you create this file as instructed
 
 export const api = axios.create({
   baseURL: config.apiBaseUrl,
@@ -8,7 +8,27 @@ export const api = axios.create({
   },
 });
 
-// API response types
+// ============================================
+// API Response Types
+// ============================================
+
+export interface ItemData {
+  type: string;
+  amount: number;
+  display_name: string | null;
+  lore: string[] | null;
+  custom_model_data: number | null;
+  // ADDED: Field for the item icon URL from the backend service
+  icon_url?: string | null; 
+}
+
+export interface ShopOffer {
+  id: string;
+  result: ItemData | null;
+  cost1: ItemData | null;
+  cost2: ItemData | null;
+}
+
 export interface Shop {
   id: string;
   uuid: string;
@@ -25,20 +45,33 @@ export interface Shop {
   offers: ShopOffer[];
 }
 
-export interface ShopOffer {
-  id: string;
+// --- NEW TYPES for /trades/available ---
+export interface AvailableTrade {
+  trade_unique_id: string; // The generated unique ID from backend
+  shop_uuid: string;
+  shop_type: string;
+  shop_name: string;
+  owner_uuid: string | null;
+  owner_name: string | null;
+  location: {
+    world: string;
+    x: number;
+    y: number;
+    z: number;
+  };
+  id: string; // The offer ID from the YAML (original shop offer ID)
   result: ItemData | null;
   cost1: ItemData | null;
   cost2: ItemData | null;
 }
 
-export interface ItemData {
-  type: string;
-  amount: number;
-  display_name: string | null;
-  lore: string[] | null;
-  custom_model_data: number | null;
+export interface AvailableTradesResponse {
+    trades: AvailableTrade[];
+    total: number;
+    page: number;
+    page_size: number;
 }
+// ---------------------------------------
 
 export interface Trade {
   timestamp: string;
@@ -83,7 +116,18 @@ export interface ServerStatus {
   error?: string;
 }
 
-// API functions
+export interface PlayerStatus {
+  uuid: string;
+  name: string | null;
+  has_logged_in: boolean;
+  is_banned: boolean;
+  message: string;
+}
+
+// ============================================
+// API Functions
+// ============================================
+
 export const shopApi = {
   getAll: (skip = 0, limit = 100) =>
     api.get<{ shops: Shop[]; total: number }>('/shops/', { params: { skip, limit } }),
@@ -98,6 +142,10 @@ export const shopApi = {
 export const tradeApi = {
   getRecent: (limit = 50) =>
     api.get<Trade[]>('/trades/recent', { params: { limit } }),
+  
+  // ADDED: Function to get available trades with item icons
+  getAvailable: (skip = 0, limit = 100) =>
+    api.get<AvailableTradesResponse>('/trades/available', { params: { skip, limit } }),
   
   getTopSellers: (limit = 10) =>
     api.get<TopSeller[]>('/trades/leaderboard/sellers', { params: { limit } }),
@@ -115,6 +163,10 @@ export const playerApi = {
   
   getProfile: (playerUuid: string) =>
     api.get(`/players/${playerUuid}`),
+
+  // ADDED: Function to check player login and ban status
+  getStatus: (playerUuid: string) =>
+    api.get<PlayerStatus>(`/players/${playerUuid}/status`),
 };
 
 export const serverApi = {

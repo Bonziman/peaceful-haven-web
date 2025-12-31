@@ -1,30 +1,45 @@
 # app/services/item_mapping.py
 import httpx
+import asyncio
 from typing import Dict, Any, Optional
-from functools import lru_cache
 from ..config import get_settings
 
 settings = get_settings()
 
-MINECRAFT_API_URL = "https://minecraft-api.vercel.app/api/items"
+# We will fetch the data from the /api/items endpoint
+MINECRAFT_API_URL = "https://minecraft-api.vercel.app/api/items" 
 
-@lru_cache(maxsize=1)
-async def fetch_item_data() -> Dict[str, Any]:
-    """Fetches and caches the full list of Minecraft items from the public API."""
+ITEM_MAP_CACHE: Dict[str, Any] = {}
+
+def sync_fetch_item_data() -> Dict[str, Any]:
+    """Synchronous function to fetch the item data and map it to Minecraft IDs."""
     try:
-        # Use httpx to make an async request (you have it in requirements.txt)
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(MINECRAFT_API_URL)
-            response.raise_for_status() # Raise an exception for bad status codes
+        with httpx.Client(timeout=10.0) as client:
+            response = client.get(MINECRAFT_API_URL)
+            response.raise_for_status()
             items_list = response.json()
             
-            # Convert list to a dictionary for fast lookup: item_id -> item_data
-            # IDs are typically lowercase: 'minecraft:iron_ingot'
-            item_map = {item.get('id', '').lower(): item for item in items_list}
-            
-            # Also handle older ID format without 'minecraft:' prefix
+            item_map = {}
             for item in items_list:
-                item_map[item.get('id', '').split(':')[-1].lower()] = item
+                namespaced_id = item.get('namespacedId', '').lower() # e.g., 'acacia_boat'
+                if not namespaced_id:
+                    continue
+
+                # The full Minecraft ID (e.g., 'minecraft:acacia_boat')
+                full_id = f"minecraft:{namespaced_id}" 
+                
+                # We need to map the ID to a standardized object containing the name and image URL.
+                standard_item_data = {
+                    "name": item.get('name'), 
+                    "icon_url": item.get('image'), # The full URL, e.g., .../acacia_boat.png
+                }
+
+                # 1. Store by FULL ID (what comes from the YAML): 'minecraft:acacia_boat'
+                item_map[full_id] = standard_item_data
+                
+                # 2. Store by SHORT ID (the namespacedId): 'acacia_boat'
+                # This helps catch items where the YAML might omit 'minecraft:' or if we search by short name.
+                item_map[namespaced_id] = standard_item_data
             
             return item_map
             
@@ -35,31 +50,54 @@ async def fetch_item_data() -> Dict[str, Any]:
         
     return {}
 
-async def get_item_info(item_id: str) -> Optional[Dict[str, Any]]:
-    """Retrieves cached info for a single item ID."""
-    item_map = await fetch_item_data()
-    # Check both 'minecraft:id' and 'id' format
-    return item_map.get(item_id.lower()) or item_map.get(item_id.split(':')[-1].lower())
+async def load_item_map_cache():
+    """Populates the global cache using a separate thread."""
+    global ITEM_MAP_CACHE
+    print("Pre-loading Minecraft item data from external API...")
+    ITEM_MAP_CACHE = await asyncio.to_thread(sync_fetch_item_data)
+    print(f"✓ Loaded {len(ITEM_MAP_CACHE)} item definitions.")
+
+def get_item_info(item_id: str) -> Optional[Dict[str, Any]]:
+    """Retrieves cached info for a single item ID (synchronous access)."""
+    
+    # 1. Check for the full ID (e.g., 'minecraft:diamond')
+    full_id = item_id.lower()
+    info = ITEM_MAP_CACHE.get(full_id)
+    if info:
+        return info
+    
+    # 2. Check for the short ID (e.g., 'diamond')
+    short_id = full_id.split(':')[-1]
+    info = ITEM_MAP_CACHE.get(short_id)
+    
+    return info
 
 async def enrich_item_data(item_data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     """Enriches an item dictionary with friendly name and icon URL."""
     if not item_data or not item_data.get('type'):
         return item_data
     
-    # Use existing display_name if it's a custom item from the YAML
-    if item_data.get("display_name"):
-        return item_data
-
-    item_id = item_data['type'] # e.g., 'minecraft:firework_rocket'
-    item_info = await get_item_info(item_id)
+    custom_display_name = item_data.get("display_name")
+    
+    item_id = item_data['type'] 
+    item_info = get_item_info(item_id) # Synchronous call to cached data
     
     if item_info:
-        item_data['display_name'] = item_info.get('name', item_id)
-        item_data['icon_url'] = item_info.get('icon')
-        item_data['api_data'] = item_info # Optional: keep the raw API data
+        # 2. ALWAYS try to get the icon URL from the API data ('image' is now 'icon_url')
+        item_data['icon_url'] = item_info.get('icon_url')
+        
+        # 3. Use the CUSTOM name if it exists; otherwise, use the API name
+        if custom_display_name:
+            item_data['display_name'] = custom_display_name
+        else:
+            # item_info['name'] holds the friendly name from the public API
+            item_data['display_name'] = item_info.get('name', item_id)
+            
     else:
-        # Fallback if the item is not in the public API (e.g., custom modded items)
-        item_data['display_name'] = item_id.replace('minecraft:', '').replace('_', ' ').title()
-        item_data['icon_url'] = None # No icon available
+        # Fallback for custom/modded items not in the API:
+        if not custom_display_name:
+            item_data['display_name'] = item_id.replace('minecraft:', '').replace('_', ' ').title()
+            
+        item_data['icon_url'] = None
         
     return item_data

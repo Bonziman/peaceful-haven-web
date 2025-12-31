@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from .database import init_website_db
 from .config import get_settings
 from .routers import shops, trades, players, server
+from .services.item_mapping import load_item_map_cache 
 
 settings = get_settings()
 
@@ -13,6 +14,10 @@ async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
     print("🚀 Starting Peaceful Haven API...")
     init_website_db()
+    
+    # Load item map during startup
+    await load_item_map_cache() 
+    
     print("✓ All systems ready!")
     yield
     print("👋 Shutting down...")
