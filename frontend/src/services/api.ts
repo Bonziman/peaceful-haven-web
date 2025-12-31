@@ -45,7 +45,7 @@ export interface Shop {
   offers: ShopOffer[];
 }
 
-// --- NEW TYPES for /trades/available ---
+// --- TYPES for /trades/available ---
 export interface AvailableTrade {
   trade_unique_id: string; // The generated unique ID from backend
   shop_uuid: string;

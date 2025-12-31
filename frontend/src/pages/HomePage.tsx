@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { serverApi, tradeApi, playerApi } from '../services/api';
+import { serverApi, tradeApi, playerApi } from '@/services/api';
 import { Users, ShoppingBag, Clock, TrendingUp } from 'lucide-react';
 
 export default function HomePage() {
