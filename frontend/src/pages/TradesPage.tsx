@@ -1,19 +1,55 @@
 // frontend/src/pages/TradesPage.tsx (Renamed and slightly modified from TradesList.tsx)
 import React, { useState, useEffect } from 'react';
-import type { AvailableTrade, AvailableTradesResponse, tradeApi } from '../services/api';
-import { TradeItem, getDisplayName } from '@/components/TradeComponents';
+import { tradeApi } from '@/services/api';
+import type { AvailableTrade } from '@/services/api';
+import { TradeItem } from '@/components/TradeComponents';
+
+// Define the new grouped structure type
+interface ShopGroup extends Omit<Shop, 'offers'> { // Omit 'offers' from the original Shop type
+    trades: AvailableTrade[]; // Add the flattened list of trades
+}
+
+// Function to group the flattened trades by their shop UUID
+const groupTradesByShop = (trades: AvailableTrade[]): ShopGroup[] => {
+    const shopMap = new Map<string, ShopGroup>();
+    
+    for (const trade of trades) {
+        const shopUuid = trade.shop_uuid;
+        
+        if (!shopMap.has(shopUuid)) {
+            // Initialize the shop group with metadata from the first trade
+            shopMap.set(shopUuid, {
+                uuid: shopUuid,
+                id: trade.id, // Note: This ID is NOT the shop ID, but the offer ID. We should use shop_uuid
+                type: trade.shop_type,
+                name: trade.shop_name,
+                owner_uuid: trade.owner_uuid,
+                owner_name: trade.owner_name,
+                location: trade.location,
+                trades: []
+            });
+        }
+        
+        shopMap.get(shopUuid)?.trades.push(trade);
+    }
+    
+    return Array.from(shopMap.values());
+};
 
 // Function to fetch and display the list of trades
 const TradesPage: React.FC = () => {
     const [trades, setTrades] = useState<AvailableTrade[]>([]);
+    const [groupedShops, setGroupedShops] = useState<ShopGroup[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const loadTrades = async () => {
             try {
-                const response = await tradeApi.getAvailable(0, 100);
-                setTrades(response.data.trades);
+                const response = await tradeApi.getAvailable(0, 500);
+                const trades = response.data.trades;
+                const grouped = groupTradesByShop(trades);
+                setGroupedShops(grouped);
             } catch (err) {
                 console.error("Failed to fetch trades:", err);
                 setError("Failed to load trades. Please check the server.");
@@ -52,12 +88,12 @@ const TradesPage: React.FC = () => {
                         </p>
                         
                         <div style={{ borderTop: '1px dashed #555', paddingTop: '10px' }}>
-                            <p style={{ margin: '0 0 5px 0' }}>**SELLS**</p>
+                            <p style={{ margin: '0 0 5px 0' }}>SELLS</p>
                             <TradeItem item={trade.result} />
                         </div>
 
                         <div style={{ borderTop: '1px dashed #555', paddingTop: '10px', marginTop: '10px' }}>
-                            <p style={{ margin: '0 0 5px 0' }}>**FOR**</p>
+                            <p style={{ margin: '0 0 5px 0' }}>FOR</p>
                             <TradeItem item={trade.cost1} />
                             {trade.cost2 && <TradeItem item={trade.cost2} />}
                         </div>

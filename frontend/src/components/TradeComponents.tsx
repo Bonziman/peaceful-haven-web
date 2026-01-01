@@ -32,7 +32,7 @@ export const TradeItem: React.FC<{ item: ItemData | null }> = ({ item }) => {
                 />
             )}
             <span>
-                {item.amount}x **{displayName}**
+                {item.amount}x {displayName}
             </span>
         </div>
     );

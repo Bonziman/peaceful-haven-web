@@ -6,7 +6,7 @@ from ..database import get_playtime_db, get_shopkeepers_db
 from ..models.database import PlayerPlaytime, ShopkeeperTrade
 from ..services.yaml_parser import get_shops_by_owner
 from ..schemas.player import PlayerPlaytimeInfo, PlayerProfile
-from ..services.player_status import is_player_banned, has_player_logged_in, get_player_name_by_uuid
+from ..services.player_status import is_player_banned_by_uuid, has_player_logged_in, get_player_name_by_uuid
 
 router = APIRouter()
 
@@ -106,7 +106,7 @@ async def get_player_status(player_uuid: str):
             "message": "Player has not logged in to the server yet or cache has expired."
         }
         
-    is_banned = is_player_banned(player_uuid)
+    is_banned = is_player_banned_by_uuid,(player_uuid)
 
     return {
         "uuid": player_uuid,

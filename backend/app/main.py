@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from .database import init_website_db
 from .config import get_settings
-from .routers import shops, trades, players, server
+from .routers import shops, trades, players, server, auth
 from .services.item_mapping import load_item_map_cache 
 
 settings = get_settings()
@@ -35,9 +35,12 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        settings.FRONTEND_URL,
+        settings.FRONTEND_URL,                  # Should be 'https://web.peacefulhaven.lol'
         "http://localhost:5173",
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "https://web.peacefulhaven.lol",        # <-- Redundancy is safety here
+        "https://api.peacefulhaven.lol",
+        "http://127.0.0.1:8000"                 # Added for good measure
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -69,3 +72,4 @@ app.include_router(shops.router, prefix="/shops", tags=["Shops"])
 app.include_router(trades.router, prefix="/trades", tags=["Trades"])
 app.include_router(players.router, prefix="/players", tags=["Players"])
 app.include_router(server.router, prefix="/server", tags=["Server"])
+app.include_router(auth.router, prefix="/auth", tags=["Authentication"])

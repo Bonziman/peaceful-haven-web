@@ -2,7 +2,8 @@ import axios from 'axios';
 import { config } from '../config'; // Assuming you create this file as instructed
 
 export const api = axios.create({
-  baseURL: config.apiBaseUrl,
+  // This line must execute with the correct, resolved URL.
+  baseURL: config.apiBaseUrl, 
   headers: {
     'Content-Type': 'application/json',
   },

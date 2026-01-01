@@ -8,5 +8,5 @@ export const config = {
   
   // *** CRUCIAL FIX ***
   // When inside the Docker container, use the Docker service name 'web'
-  apiBaseUrl: isDevelopment ? 'http://web:8000' : 'https://api.peacefulhaven.lol',
+  apiBaseUrl: isDevelopment ? 'http://localhost:8000' : 'https://api.peacefulhaven.lol',
 };
