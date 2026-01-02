@@ -8,6 +8,7 @@ from ..models.database import ShopkeeperTrade
 from ..schemas.trade import TradeRecord, TradeStats, PlayerTradeHistory, TopSeller
 from ..services.yaml_parser import extract_all_available_trades 
 from ..services.item_mapping import enrich_item_data 
+from ..services.stock import get_stock_count
 
 router = APIRouter()
 
@@ -165,6 +166,20 @@ async def get_available_trades(skip: int = 0, limit: int = 100):
     
     # 1. Enrich the trade data asynchronously
     for trade in all_trades:
+        
+        is_admin_shop = trade.get('shop_type') == 'admin'
+        
+        stock_count = None
+        
+        if is_admin_shop:
+            # ADMIN SHOP LOGIC: Set stock to a very high, practical 'unlimited' value
+            stock_count = "UNLIMITED"
+        else:
+            # PLAYER SHOP LOGIC: Check the live stock file
+            stock_count = get_stock_count(trade['shop_uuid'], trade['id'])
+            
+        trade['stock_remaining'] = stock_count 
+        
         # Enrich the result item
         trade['result'] = await enrich_item_data(trade.get('result'))
         # Enrich the cost 1 item

@@ -3,8 +3,9 @@ services:
     build: ./backend
     container_name: minecraft-web
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:8000:8000"
+    network_mode: "host" 
+    #ports:
+    #   - "127.0.0.1:8000:8000"
     volumes:
       # Shopkeepers data: The active shops are in this YAML file
       - /home/opc/PaperServer/plugins/Shopkeepers/data/save.yml:/minecraft/shopkeepers/data/save.yml:ro
@@ -17,11 +18,13 @@ services:
       - /home/opc/PaperServer/usercache.json:/minecraft/usercache.json:ro
       # website-db (already mounted)
       - website-db:/app/data
+      # Stock file for shop items
+      - ./backend/data/shop_stock.json:/minecraft/stock/shop_stock.json:ro
       - ./backend:/app
     env_file:
       - ./backend/.env
-    networks:
-      - minecraft-web-network
+    #networks:
+    #  - minecraft-web-network
     logging:
       driver: "json-file"
       options:
@@ -32,6 +35,6 @@ volumes:
   website-db:
     driver: local
 
-networks:
-  minecraft-web-network:
-    driver: bridge
+#networks:
+#  minecraft-web-network:
+#    driver: bridge

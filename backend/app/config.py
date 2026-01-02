@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     SHOPKEEPERS_SAVE: str = "/minecraft/shopkeepers/data/save.yml"
     SHOPKEEPERS_DB: str
     PLAYTIME_DB: str
+    STOCK_FILE_PATH: str = "/minecraft/stock/shop_stock.json"
     
     # Minecraft Server (for status queries)
     MC_SERVER_HOST: str = "localhost"

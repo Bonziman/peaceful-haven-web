@@ -53,7 +53,6 @@ const App: React.FC = () => {
                     display: 'flex', 
                     justifyContent: 'space-between', 
                     alignItems: 'center',
-                    maxWidth: '1400px', /* Optional: Max width for content */
                     margin: '0 auto',
                 }}>
                     <div style={{ fontSize: '1.5em', fontWeight: 'bold', color: 'var(--color-accent)' }}>

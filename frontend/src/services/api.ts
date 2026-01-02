@@ -48,6 +48,7 @@ export interface Shop {
 
 // --- TYPES for /trades/available ---
 export interface AvailableTrade {
+  stock_remaining: any;
   trade_unique_id: string; // The generated unique ID from backend
   shop_uuid: string;
   shop_type: string;

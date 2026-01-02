@@ -1,62 +1,287 @@
-// frontend/src/components/ShopGroupCard.tsx (Conceptual Component)
-import React from 'react';
-import { AvailableTrade } from '../services/api';
-import { TradeItem } from './TradeComponents'; // Reusable item component
+// frontend/src/components/ShopGroupCard.tsx
 
+import React, { useState } from 'react';
+import type { AvailableTrade, ItemData } from '../services/api'; 
+// Assuming ItemData is imported from '../services/api' or is globally available
+
+// ----------------------------------------------------
+// TYPES (Copied from TradesPage for self-containment)
+// ----------------------------------------------------
+interface ShopGroup {
+    shop_uuid: string;
+    name: string;
+    type: string;
+    owner_name: string | null;
+    location: AvailableTrade['location'];
+    trades: AvailableTrade[];
+}
 interface ShopGroupCardProps {
-    shop: ShopGroup; // The new grouped structure
+    shop: ShopGroup;
 }
 
-const ShopGroupCard: React.FC<ShopGroupCardProps> = ({ shop }) => {
-    // Determine the color accent based on shop type
-    const isOwnerShop = shop.owner_uuid !== null;
-    const borderColor = isOwnerShop ? 'var(--color-primary)' : 'var(--color-accent)'; // Blue for player, Orange for admin
+
+// ----------------------------------------------------
+// TRADE ITEM COMPONENT (FINAL CORRECTED VERSION)
+// Handles display name extraction, image loading, and mirroring
+// ----------------------------------------------------
+const TradeItem: React.FC<{ item: ItemData, isMirrored?: boolean }> = ({ item, isMirrored = false }) => {
+    
+    // --- Safe Name Extraction Logic (Handles JSON text components) ---
+    let baseName = item?.display_name || item?.type?.split(':').pop() || 'Item';
+
+    // Check for JSON-like Minecraft component text and extract the "text" property
+    if (baseName.includes('"text"')) {
+        const match = baseName.match(/"text":"(.*?)"/i);
+        baseName = match ? match[1] : 'Custom Item';
+    } else if (baseName.startsWith('{') && baseName.endsWith('}')) {
+        const match = baseName.match(/text:\s*["']?([^,"']+)["']?/i);
+        baseName = match ? match[1] : 'Custom Item';
+    }
+    
+    const displayName = baseName;
+    const imageUrl = item?.icon_url;
+
+    if (!item || !displayName) return null;
+
+    return (
+        // Layout container: uses row or row-reverse based on the isMirrored prop
+        <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '8px',
+            flexDirection: isMirrored ? 'row-reverse' : 'row' // Mirror the layout
+        }}>
+            
+            {/* The Icon Container */}
+            <div style={{
+                width: '40px', 
+                height: '40px',
+                backgroundColor: '#2A2A2A',
+                border: '1px solid #444',
+                borderRadius: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                flexShrink: 0
+            }}>
+                {imageUrl ? (
+                    <img
+                        src={imageUrl}
+                        alt={displayName}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain',
+                            imageRendering: 'pixelated', 
+                            padding: '4px'
+                        }}
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                    />
+                ) : (
+                    // FALLBACK: Text for custom/modded items
+                    <span style={{ 
+                        fontSize: '8px', 
+                        textAlign: 'center', 
+                        color: 'var(--color-accent)', 
+                        padding: '2px', 
+                        wordBreak: 'break-all',
+                        lineHeight: '1.2'
+                    }}>
+                        CUSTOM ITEM
+                    </span>
+                )}
+            </div>
+            
+            {/* The Text Container: holds Name and Amount */}
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                // Align text based on mirroring
+                alignItems: isMirrored ? 'flex-end' : 'flex-start', 
+                whiteSpace: 'nowrap',
+                overflow: 'hidden'
+            }}>
+                <span style={{
+                    fontSize: '14px', 
+                    fontWeight: '600',
+                    color: 'var(--color-text-light)', 
+                    lineHeight: '1.2',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '100%'
+                }}>
+                    {displayName}
+                </span>
+                <span style={{
+                    fontSize: '12px', 
+                    color: 'var(--color-text-subtle)', 
+                    fontWeight: '400',
+                }}>
+                    {item.amount}x 
+                </span>
+            </div>
+        </div>
+    );
+};
+
+
+// ----------------------------------------------------
+// TRADE ROW COMPONENT
+// ----------------------------------------------------
+const TradeRow: React.FC<{ trade: AvailableTrade }> = ({ trade }) => {
+    // 1. Determine Stock Status
+    const stock = trade.stock_remaining;
+    const isLowStock = stock !== null && stock <= 5;
+    const stockText = stock === null ? 'Stock N/A' : (stock === 0 ? 'SOLD OUT' : `${stock} IN STOCK`);
+    
+    // 2. Determine Stock Color
+    const stockColor = stock === 0 
+        ? '#ff6b6b' // Red for sold out
+        : isLowStock 
+            ? 'var(--color-accent)' // Orange for low stock
+            : 'var(--color-primary)'; // Blue for normal stock
 
     return (
         <div style={{
-            backgroundColor: 'rgba(26, 26, 26, 0.7)', // Dark transparent background
-            border: `1px solid ${borderColor}`,
-            borderRadius: '8px',
-            margin: '20px 0',
-            padding: '20px',
-            boxShadow: `0 0 15px 0px ${borderColor}40`, // Subtle glow effect
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '16px',
+            backgroundColor: 'rgba(20, 20, 20, 0.8)',
+            borderBottom: '1px solid #1a1a1a',
+            gap: '16px'
         }}>
-            {/* Shop Header */}
-            <div style={{ borderBottom: '1px dashed var(--color-text-subtle)', paddingBottom: '10px', marginBottom: '15px' }}>
-                <h3 style={{ margin: '0', color: 'var(--color-text-light)', fontSize: '1.5em' }}>
-                    {shop.name || 'Unnamed Shop'} ({shop.shop_type.toUpperCase()})
-                </h3>
-                <p style={{ margin: '5px 0 0 0', color: 'var(--color-text-subtle)' }}>
-                    Owner: {shop.owner_name || 'System'} | World: {shop.location.world} ({shop.location.x}, {shop.location.y}, {shop.location.z})
-                </p>
+            {/* Cost Side (Left - NO MIRROR) */}
+            <div style={{
+                display: 'flex',
+                gap: '12px',
+                alignItems: 'center',
+                minWidth: '200px', 
+                justifyContent: 'flex-start'
+            }}>
+                <TradeItem item={trade.cost1} />
+                {trade.cost2 && (
+                    <>
+                        <span style={{ color: 'var(--color-text-subtle)', fontSize: '12px' }}>+</span>
+                        <TradeItem item={trade.cost2} />
+                    </>
+                )}
             </div>
-            
-            {/* Individual Trades List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                {shop.trades.map((trade, index) => (
-                    <div 
-                        key={trade.trade_unique_id} 
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px', borderBottom: index < shop.trades.length - 1 ? '1px dotted #333' : 'none' }}
-                    >
-                        {/* Cost Side (Left) */}
-                        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', color: 'var(--color-text-subtle)' }}>
-                            <TradeItem item={trade.cost1} showAmount={true} />
-                            {trade.cost2 && <> & </>}
-                            {trade.cost2 && <TradeItem item={trade.cost2} showAmount={true} />}
-                        </div>
-                        
-                        {/* Separator Arrow (Center) */}
-                        <span style={{ color: 'var(--color-accent)', fontSize: '1.5em', margin: '0 20px' }}>
-                            &rarr;
-                        </span>
 
-                        {/* Result Side (Right) */}
-                        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', color: 'var(--color-primary)' }}>
-                            <TradeItem item={trade.result} showAmount={true} />
-                        </div>
-                    </div>
-                ))}
+            
+            {/* Stock Status Block (Center) */}
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                flex: 1,
+                textAlign: 'center',
+                margin: '0 20px',
+            }}>
+                <span style={{ 
+                    fontSize: '11px', 
+                    fontWeight: '600',
+                    color: stockColor, // Apply stock status color
+                    marginBottom: '4px',
+                    letterSpacing: '0.5px'
+                }}>
+                    {stockText}
+                </span>
+                <span style={{ 
+                    color: 'var(--color-accent)', 
+                    fontSize: '20px',
+                    lineHeight: '1'
+                }}>
+                    &rarr;
+                </span>
             </div>
+            {/* Result Side (Right - MIRRORED) */}
+            <div style={{
+                display: 'flex',
+                gap: '12px',
+                alignItems: 'center',
+                minWidth: '200px', 
+                justifyContent: 'flex-end'
+            }}>
+                <TradeItem item={trade.result} isMirrored={true} /> {/* <-- MIRROR HERE */}
+            </div>
+        </div>
+    );
+};
+
+
+// ----------------------------------------------------
+// SHOP GROUP CARD COMPONENT
+// ----------------------------------------------------
+export const ShopGroupCard: React.FC<ShopGroupCardProps> = ({ shop }) => {
+    const [expanded, setExpanded] = useState(true);
+
+    const isOwnerShop = shop.owner_uuid !== null;
+    const borderColor = isOwnerShop ? 'var(--color-primary)' : 'var(--color-accent)'; 
+
+    return (
+        <div style={{
+            backgroundColor: 'rgba(15, 15, 15, 0.95)',
+            border: `1px solid ${borderColor}`,
+            borderRadius: '6px',
+            marginBottom: '20px',
+            overflow: 'hidden',
+            boxShadow: `0 4px 12px ${borderColor}20` 
+        }}>
+            {/* Header */}
+            <div
+                onClick={() => setExpanded(!expanded)}
+                style={{
+                    padding: '16px 20px',
+                    backgroundColor: 'rgba(30, 30, 30, 0.8)',
+                    borderBottom: '1px solid #2a2a2a',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    userSelect: 'none'
+                }}
+            >
+                <div>
+                    <h3 style={{
+                        margin: '0 0 4px 0',
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        color: 'var(--color-text-light)',
+                        letterSpacing: '0.5px'
+                    }}>
+                        {shop.name} <span style={{ color: 'var(--color-text-subtle)', fontWeight: '400', fontSize: '14px' }}>({shop.type?.toUpperCase() ?? 'UNKNOWN'})</span>
+                    </h3>
+                    <p style={{
+                        margin: 0,
+                        fontSize: '12px',
+                        color: 'var(--color-text-subtle)'
+                    }}>
+                        Owner: {shop.owner_name || 'System'} | World: {shop.location.world} ({shop.location.x}, {shop.location.y}, {shop.location.z})
+                    </p>
+                </div>
+                <span style={{ fontSize: '12px', color: 'var(--color-text-subtle)' }}>
+                    {shop.trades.length} {shop.trades.length === 1 ? 'trade' : 'trades'}
+                </span>
+            </div>
+
+            {/* Trades List */}
+            {expanded && (
+                <div style={{ borderTop: '1px solid #1a1a1a' }}>
+                    {shop.trades && shop.trades.length > 0 ? (
+                        shop.trades.map((trade) => (
+                            <TradeRow key={trade.trade_unique_id} trade={trade} />
+                        ))
+                    ) : (
+                        <div style={{ padding: '16px', color: 'var(--color-text-subtle)', textAlign: 'center' }}>
+                            No trades available
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };
