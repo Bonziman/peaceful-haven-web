@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from .database import init_website_db
 from .config import get_settings
-from .routers import shops, trades, players, server, auth
+from .routers import shops, trades, players, server, auth, stats, webhooks
 from .services.item_mapping import load_item_map_cache 
 
 settings = get_settings()
@@ -73,3 +73,5 @@ app.include_router(trades.router, prefix="/trades", tags=["Trades"])
 app.include_router(players.router, prefix="/players", tags=["Players"])
 app.include_router(server.router, prefix="/server", tags=["Server"])
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+app.include_router(stats.router, prefix="/stats", tags=["Statistics"])
+app.include_router(webhooks.router, prefix="/webhooks", tags=["Webhooks"])

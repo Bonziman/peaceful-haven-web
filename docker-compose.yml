@@ -20,6 +20,8 @@ services:
       - website-db:/app/data
       # Stock file for shop items
       - ./backend/data/shop_stock.json:/minecraft/stock/shop_stock.json:ro
+      # MinecraftStats data directory
+      - /var/www/MinecraftStatsWeb/data:/minecraft/mcstats/data:ro
       - ./backend:/app
     env_file:
       - ./backend/.env

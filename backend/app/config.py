@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     SHOPKEEPERS_DB: str
     PLAYTIME_DB: str
     STOCK_FILE_PATH: str = "/minecraft/stock/shop_stock.json"
+    MINECRAFT_STATS_DIR: str = "/minecraft/mcstats"
+    
+    # Ko-fi Webhook
+    KOFI_VERIFICATION_TOKEN: str
     
     # Minecraft Server (for status queries)
     MC_SERVER_HOST: str = "localhost"

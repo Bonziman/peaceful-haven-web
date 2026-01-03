@@ -13,6 +13,30 @@ export const api = axios.create({
 // API Response Types
 // ============================================
 
+
+export interface TopPlayer {
+    rank: number;
+    uuid: string;
+    player_name: string;
+    value: number;
+    last_seen: string;
+}
+
+export interface StatLeaderboard {
+    stat_id: string;
+    stat_label: string;
+    top_players: TopPlayer[];
+}
+
+export interface StatsDashboard {
+    summary: {
+        total_stats_available: number;
+        total_players_cached: number;
+    };
+    leaderboards: StatLeaderboard[];
+    awards_overview: { id: string; label: string }[];
+}
+
 export interface ItemData {
   type: string;
   amount: number;
@@ -129,6 +153,15 @@ export interface PlayerStatus {
 // ============================================
 // API Functions
 // ============================================
+
+export const statsApi = {
+    getDashboard: () =>
+        api.get<StatsDashboard>('/stats/dashboard'),
+    getAvailableStats: () =>
+        api.get<{ available_stats: string[]; count: number }>('/stats/'),
+    getLeaderboard: (statName: string, limit = 20) =>
+        api.get<TopPlayer[]>(`/stats/leaderboard/${statName}`, { params: { limit } }),
+};
 
 export const shopApi = {
   getAll: (skip = 0, limit = 100) =>
