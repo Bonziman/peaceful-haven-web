@@ -11,11 +11,14 @@ class Settings(BaseSettings):
     SHOPKEEPERS_SAVE: str = "/minecraft/shopkeepers/data/save.yml"
     SHOPKEEPERS_DB: str
     PLAYTIME_DB: str
-    STOCK_FILE_PATH: str = "/minecraft/stock/shop_stock.json"
+    STOCK_FILE_PATH: str = "/minecraft/automation/shop_stock.json" 
+    COMMAND_QUEUE_PATH: str = "/minecraft/automation/command_queue.json" # Already pointing here
     MINECRAFT_STATS_DIR: str = "/minecraft/mcstats"
     
     # Ko-fi Webhook
     KOFI_VERIFICATION_TOKEN: str
+    
+    
     
     # Minecraft Server (for status queries)
     MC_SERVER_HOST: str = "localhost"

@@ -8,8 +8,11 @@ from ..models.database import ShopkeeperTrade
 from ..schemas.trade import TradeRecord, TradeStats, PlayerTradeHistory, TopSeller
 from ..services.yaml_parser import extract_all_available_trades 
 from ..services.item_mapping import enrich_item_data 
-from ..services.stock import get_stock_count
+from ..services.stock import get_stock_count, clear_stock_cache
+import logging
 
+
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 @router.get("/recent", response_model=List[TradeRecord])
@@ -161,33 +164,62 @@ async def get_shop_trades(
 
 @router.get("/available", summary="Get all currently available trades from active shops")
 async def get_available_trades(skip: int = 0, limit: int = 100):
+    """
+    Get available trades with stock information.
+    
+    Stock handling:
+    - Admin shops: "UNLIMITED"
+    - Player shops with stock data: actual count (int)
+    - Player shops without stock data: null (shop has no container or plugin didn't scan it)
+    """
+    logger.info("🔄 [GET /available] Starting to fetch available trades...")
+    
+    # Clear the cache to get fresh stock data
+    clear_stock_cache()
+    
     all_trades = extract_all_available_trades()
+    logger.info(f"📦 [GET /available] Extracted {len(all_trades)} trades from YAML")
     total = len(all_trades)
     
-    # 1. Enrich the trade data asynchronously
-    for trade in all_trades:
+    # Enrich each trade with stock and item data
+    for idx, trade in enumerate(all_trades):
+        logger.debug(f"[Trade {idx+1}/{len(all_trades)}] Processing trade: {trade.get('id')}")
         
         is_admin_shop = trade.get('shop_type') == 'admin'
+        shop_uuid = trade.get('shop_uuid')
+        trade_id = trade.get('id')
         
-        stock_count = None
-        
+        # Determine stock_remaining
         if is_admin_shop:
-            # ADMIN SHOP LOGIC: Set stock to a very high, practical 'unlimited' value
-            stock_count = "UNLIMITED"
+            # Admin shops have unlimited stock
+            stock_remaining = "UNLIMITED"
+            logger.debug(f"[Trade {idx+1}] Admin shop detected - setting UNLIMITED stock")
         else:
-            # PLAYER SHOP LOGIC: Check the live stock file
-            stock_count = get_stock_count(trade['shop_uuid'], trade['id'])
-            
-        trade['stock_remaining'] = stock_count 
+            # Player shops: try to get stock by looking up the result item type
+            result_item_type = trade.get('result', {}).get('type')
+            stock_remaining = get_stock_count(shop_uuid, result_item_type)
+            logger.debug(f"[Trade {idx+1}] Player shop - stock_remaining: {stock_remaining}")
         
-        # Enrich the result item
+        trade['stock_remaining'] = stock_remaining
+        
+        # Enrich item data - IMPORTANT: These are async, so await them
+        logger.debug(f"[Trade {idx+1}] Enriching result item: {trade.get('result', {}).get('type')}")
         trade['result'] = await enrich_item_data(trade.get('result'))
-        # Enrich the cost 1 item
-        trade['cost1'] = await enrich_item_data(trade.get('cost1'))
-        # Enrich the cost 2 item (if it exists)
-        trade['cost2'] = await enrich_item_data(trade.get('cost2'))
         
-    # 2. Return the paginated, enriched trades
+        logger.debug(f"[Trade {idx+1}] Enriching cost1 item: {trade.get('cost1', {}).get('type')}")
+        trade['cost1'] = await enrich_item_data(trade.get('cost1'))
+        
+        if trade.get('cost2'):
+            logger.debug(f"[Trade {idx+1}] Enriching cost2 item: {trade.get('cost2', {}).get('type')}")
+            trade['cost2'] = await enrich_item_data(trade.get('cost2'))
+        
+        # Log the enriched result
+        result_item = trade.get('result', {})
+        logger.debug(f"[Trade {idx+1}] ✓ Enriched result: display_name={result_item.get('display_name')}, is_custom={result_item.get('is_custom')}, icon_url={result_item.get('icon_url')}")
+    
+    logger.info(f"✓ [GET /available] Enrichment complete. Returning {len(all_trades[skip:skip+limit])} trades")
+    
+    # Return paginated results
     return {
         "trades": all_trades[skip:skip+limit],
         "total": total,

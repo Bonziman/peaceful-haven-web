@@ -38,6 +38,7 @@ export interface StatsDashboard {
 }
 
 export interface ItemData {
+  is_custom: any;
   type: string;
   amount: number;
   display_name: string | null;

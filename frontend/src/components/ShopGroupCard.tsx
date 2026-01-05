@@ -40,18 +40,46 @@ const TradeItem: React.FC<{ item: ItemData, isMirrored?: boolean }> = ({ item, i
     
     const displayName = baseName;
     const imageUrl = item?.icon_url;
+    const isCustom = item?.is_custom; 
+    
+    const isGif = imageUrl?.toLowerCase().endsWith('.gif'); 
 
     if (!item || !displayName) return null;
 
     return (
-        // Layout container: uses row or row-reverse based on the isMirrored prop
         <div style={{ 
             display: 'flex', 
             alignItems: 'center', 
             gap: '8px',
-            flexDirection: isMirrored ? 'row-reverse' : 'row' // Mirror the layout
+            flexDirection: isMirrored ? 'row-reverse' : 'row',
+            position: 'relative',
+            // Add padding to accommodate the custom tag
+            paddingTop: isCustom ? '12px' : '0',
+            paddingLeft: !isMirrored && isCustom ? '8px' : '0',
+            paddingRight: isMirrored && isCustom ? '8px' : '0',
         }}>
             
+            {/* Custom Tag - positioned relative to the outermost container */}
+            {isCustom && (
+                <span style={{
+                    position: 'absolute',
+                    top: '-6px',
+                    // Position based on mirroring
+                    left: isMirrored ? 'auto' : '0', 
+                    right: isMirrored ? '0' : 'auto', 
+                    backgroundColor: 'var(--color-accent)', 
+                    color: 'var(--color-bg-dark)',
+                    fontSize: '9px', 
+                    fontWeight: 'bold',
+                    padding: '2px 4px',
+                    borderRadius: '3px',
+                    zIndex: 20,
+                    whiteSpace: 'nowrap'
+                }}>
+                    {displayName.toUpperCase()}
+                </span>
+            )}
+
             {/* The Icon Container */}
             <div style={{
                 width: '40px', 
@@ -99,7 +127,6 @@ const TradeItem: React.FC<{ item: ItemData, isMirrored?: boolean }> = ({ item, i
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                // Align text based on mirroring
                 alignItems: isMirrored ? 'flex-end' : 'flex-start', 
                 whiteSpace: 'nowrap',
                 overflow: 'hidden'
@@ -126,6 +153,7 @@ const TradeItem: React.FC<{ item: ItemData, isMirrored?: boolean }> = ({ item, i
         </div>
     );
 };
+
 
 
 // ----------------------------------------------------

@@ -18,8 +18,8 @@ services:
       - /home/opc/PaperServer/usercache.json:/minecraft/usercache.json:ro
       # website-db (already mounted)
       - website-db:/app/data
-      # Stock file for shop items
-      - ./backend/data/shop_stock.json:/minecraft/stock/shop_stock.json:ro
+       # This is the central hub for command queue and stock file.
+      - /home/opc/PaperServer/plugins/WebPerks:/minecraft/automation:rw
       # MinecraftStats data directory
       - /var/www/MinecraftStatsWeb/data:/minecraft/mcstats/data:ro
       - ./backend:/app
