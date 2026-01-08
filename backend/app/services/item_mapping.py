@@ -89,11 +89,11 @@ async def enrich_item_data(item_data: Optional[Dict[str, Any]]) -> Optional[Dict
     # --- 1. CHECK CUSTOM ITEM REGISTRY FIRST ---
     custom_item_info = lookup_custom_item(item_data)
     
-    if custom_item_info:
+    if custom_item_info: # <-- This condition is now TRUE due to successful lore matching
         logger.info(f"[enrich_item_data] ✓ Custom item matched! Setting custom display")
         item_data['display_name'] = custom_item_info['web_name'] 
         item_data['icon_url'] = custom_item_info['web_icon']    
-        item_data['is_custom'] = True
+        item_data['is_custom'] = True # <--- THIS IS THE LINE THAT SETS IT TO TRUE
         logger.debug(f"[enrich_item_data] Set: display_name={custom_item_info['web_name']}, icon_url={custom_item_info['web_icon']}")
         return item_data
     
@@ -129,5 +129,6 @@ async def enrich_item_data(item_data: Optional[Dict[str, Any]]) -> Optional[Dict
 
     # 5. CRITICAL FIX: Explicitly set is_custom to False for all non-matched items
     item_data['is_custom'] = False
+    logger.error(f"FINAL ENRICHED DATA FOR {item_data.get('type')}: is_custom={item_data.get('is_custom')}, display_name={item_data.get('display_name')}")
     
     return item_data

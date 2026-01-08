@@ -11,6 +11,7 @@ export interface ShopGroup {
     shop_uuid: string;
     name: string;
     type: string;
+    owner_uuid: string | null;
     owner_name: string | null;
     location: AvailableTrade['location'];
     trades: AvailableTrade[]; 
@@ -31,7 +32,8 @@ const groupTradesByShop = (trades: AvailableTrade[]): ShopGroup[] => {
                 shop_uuid: shopUuid,
                 name: trade.shop_name || 'System Shop',
                 type: trade.shop_type,
-                owner_name: trade.shop_owner_name,
+                owner_uuid: trade.owner_uuid,
+                owner_name: trade.owner_name,
                 location: trade.location,
                 trades: []
             });

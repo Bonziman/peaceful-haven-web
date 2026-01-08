@@ -6,8 +6,15 @@ const HERO_IMAGES = [
     '/images/hero3.png',
 ];
 
+// --- Define Types for ServerAddressCard ---
+interface ServerAddressCardProps {
+    type: string;
+    address: string;
+}
+
 // --- Server Address Card Component ---
-const ServerAddressCard = ({ type, address }) => {
+// FIX: Use defined type
+const ServerAddressCard: React.FC<ServerAddressCardProps> = ({ type, address }) => {
     const [copied, setCopied] = useState(false);
     
     const handleCopy = () => {
@@ -23,13 +30,21 @@ const ServerAddressCard = ({ type, address }) => {
         >
             <div className="server-label">{type}</div>
             <div className="server-address">{address}</div>
-            <div className="server-copy-icon">{copied ? '✓' : '📋'}</div>
+            <div className="server-copy-icon">{copied ? '✓' : 'Copy'}</div>
         </button>
     );
 };
 
+// --- Define Types for FeatureCard ---
+interface FeatureCardProps {
+    title: string;
+    description: string;
+    icon: string; // Assuming the icon is an emoji string
+}
+
 // --- Feature Card Component ---
-const FeatureCard = ({ title, description, icon }) => (
+// FIX: Use defined type
+const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) => (
     <div className="feature-card">
         <div className="feature-icon">{icon}</div>
         <h3>{title}</h3>
@@ -37,9 +52,9 @@ const FeatureCard = ({ title, description, icon }) => (
     </div>
 );
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
     const [heroImageIndex, setHeroImageIndex] = useState(0);
-    const [serverStatus, setServerStatus] = useState({ online: false });
+    const [serverStatus, setServerStatus] = useState<{ online: boolean; players?: { online: number; max: number } }>({ online: false });
 
     useEffect(() => {
         // Simulate server status
@@ -507,7 +522,7 @@ const HomePage = () => {
                     <FeatureCard
                         icon="🛡️"
                         title="Safe & Protected"
-                        description="Enjoy worry-free building with claim protection, active moderation, and anti-grief systems that ensure a peaceful long-term experience."
+                        description="A peaceful community built on trust and respect. Griefers face strict punishments and rollbacks to ensure your creations are preserved."
                     />
                     <FeatureCard
                         icon="🌐"

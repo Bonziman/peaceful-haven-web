@@ -4,8 +4,9 @@ import React from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import TradesPage from './pages/TradesPage';
-import LoginPage from './pages/LoginPage';
-import StatsPage from './pages/StatsPage'; 
+
+import DonatePage from './pages/DonatePage';
+
 import './App.css'; 
 
 // Utility to create the active navigation link style
@@ -102,8 +103,8 @@ const App: React.FC = () => {
                     }}>
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="/trades">Trades</NavLink>
-                        <NavLink to="/stats">Stats</NavLink>
-                        <NavLink to="/login">Login</NavLink>
+                        <NavLink to="/donate">Donate</NavLink>
+                        
                     </div>
                 </div>
             </nav>
@@ -112,9 +113,10 @@ const App: React.FC = () => {
             <main style={{ width: '100%', boxSizing: 'border-box' }}>
                 <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/donate" element={<DonatePage />} />
                     <Route path="/trades" element={<TradesPage />} />
-                    <Route path="/stats" element={<StatsPage />} />
-                    <Route path="/login" element={<LoginPage />} />
+                    
+                    
                     <Route path="*" element={<div style={{padding: '40px', textAlign: 'center'}}>
                         <h1 style={{color: 'var(--color-accent)'}}>404 - DATA NOT FOUND</h1>
                         <p style={{color: 'var(--color-text-subtle)'}}>The requested data slice does not exist.</p>
