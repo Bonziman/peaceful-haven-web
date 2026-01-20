@@ -1,12 +1,14 @@
-/* App.css - Main Application Styles */
+/* frontend/src/App.css - FINAL NAVBAR AND HERO FIXES */
 
+/* Color Variables (Adjusted for better contrast on a bright image) */
 :root {
-  --primary: #2a68b3;
-  --accent: #f89820;
+  --primary: #2a68b3; /* Primary Blue */
+  --accent: #f89820; /* Primary Orange/Yellow */
   --text-light: #ffffff;
   --text-dark: #1a1a1a;
-  --text-muted: #666666;
-  --bg-light: #f5f5f5;
+  --text-muted: rgba(255, 255, 255, 0.7); /* Muted white for clarity */
+  --bg-dark: #1A1A1A;
+  --bg-dark-transparent: rgba(26, 26, 26, 0.8);
 }
 
 * {
@@ -15,124 +17,103 @@
   box-sizing: border-box;
 }
 
-#root {
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+}
+
+#root, .App, main {
   min-height: 100vh;
 }
 
-.App {
-  min-height: 100vh;
-}
 
-/* ===== NAVBAR ===== */
+/* ===== NAVBAR (Transparent and Full-Width) ===== */
 nav {
-  background: transparent !important;
-  backdrop-filter: none;
-  border-bottom: none;
+  /* Ensure nav bar sits on top of content and is fully transparent */
+  background: transparent; 
   width: 100%;
-  box-sizing: border-box;
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
   z-index: 1000;
-  transition: all 0.3s ease;
-  pointer-events: auto;
+  pointer-events: none; /* Allow clicks to pass through empty areas */
 }
 
-nav > div {
+.nav-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  max-width: 100%;
   margin: 0 auto;
   width: 100%;
-  box-sizing: border-box;
+  pointer-events: auto; /* Re-enable clicks on content */
 }
 
-/* Logo */
-nav a:first-of-type {
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: var(--text-light);
-  letter-spacing: 1.5px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-nav a:first-of-type:hover {
-  opacity: 0.8;
-}
-
-nav a:first-of-type span {
-  font-size: 1.4rem;
-}
-
-/* Nav Links Container */
-nav > div > div {
-  display: flex;
-  gap: 50px;
-  align-items: center;
-}
-
-/* Nav Links */
-
-
-nav a:not(:first-of-type):hover {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* Main Content */
-main {
-  width: 100%;
-  box-sizing: border-box;
-  background: transparent;
-}
-
-/* 404 Page */
-main > div {
-  
-  text-align: center;
-}
-
-main > div h1 {
-  color: var(--accent);
-  margin-bottom: 20px;
-}
-
-main > div p {
-  color: #aaaaaa;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  nav > div {
-    padding: 15px 20px;
-  }
-
-  nav > div > div {
-    gap: 25px;
-  }
-
-  nav a:not(:first-of-type) {
-    font-size: 0.75rem;
-  }
-
-  nav a:first-of-type {
-    font-size: 1rem;
-  }
+/* Logo Group */
+.nav-logo-group a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
 .logo {
   height: 40px;
+  /* Apply a slight shadow to make it pop against a light background */
+  
+}
+
+
+/* Nav Links Group */
+.nav-links-group {
+  display: flex;
+  gap: 30px; /* Space out the links */
+  align-items: center;
+}
+
+/* Primary Nav Links */
+.nav-link {
+  color: var(--text-light);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.nav-link:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.nav-link.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Play Now Button (Inspired by the Orange Button) */
+.play-now-btn {
+    background-color: var(--accent);
+    color: var(--text-dark);
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 8px rgba(248, 152, 32, 0.4);
+}
+
+.play-now-btn:hover {
+    background-color: #ffb559; /* Slightly lighter orange */
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(248, 152, 32, 0.6);
+}
+
+
+/* ===== HERO SECTION FIXES (Crucial for the full-width content) ===== */
+
+/* Ensure main content starts below the transparent nav */
+main {
+    padding-top: 0; 
 }
