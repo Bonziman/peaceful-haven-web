@@ -50,7 +50,22 @@
   left: 0;
 }
 
-
+.hero-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Between the image and the content */
+    
+    /* GRADIENT CONTROL */
+    /* This gradient fades from a dark color at the bottom to transparent at the top. 
+       This helps the text stand out at the top-center. */
+    background: linear-gradient(to bottom, rgb(234 234 234 / 0%) 0%, /* Fully transparent at the top */ rgb(0 0 0 / 34%) 40%, /* Lightens the middle */ rgb(27 28 37 / 64%) 70%, /* Darkens the bottom (where content usually scrolls up) */ rgba(253, 181, 94, 0) 100% /* Very dark at the very bottom */);
+    
+    
+}
 
 .hero-content {
   position: relative;
@@ -76,13 +91,19 @@
   }
 }
 
+
 .hero h1 {
   font-size: clamp(2.5rem, 10vw, 4rem);
   font-weight: 900;
-  color: var(--text-light);
   letter-spacing: 1px;
   line-height: 1.15;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  color: #f8f8ff;
+  background-image: linear-gradient(45deg, #f8f8ff , #e0ffff 33%, #add8e6 67%, #87ceeb 100%);
+  
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
 .hero p {
@@ -176,20 +197,14 @@
   font-size: 1.05rem;
   font-weight: 600;
   color: var(--text-light);
-  font-family: 'Courier New', monospace;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   letter-spacing: 0.5px;
   position: relative;
   z-index: 2;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.server-copy-icon {
-  font-size: 1rem;
-  opacity: 0.7;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 2;
-}
+
 
 .server-card:hover .server-copy-icon {
   opacity: 1;

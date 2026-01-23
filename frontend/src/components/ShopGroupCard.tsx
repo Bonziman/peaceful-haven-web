@@ -251,7 +251,7 @@ export const ShopGroupCard: React.FC<ShopGroupCardProps> = ({ shop }) => {
 
     // shop.owner_uuid must be handled as string | null based on imported type
     const isOwnerShop = shop.owner_uuid !== null;
-    const borderColor = isOwnerShop ? 'var(--color-primary)' : 'var(--color-accent)'; 
+    const borderColor = isOwnerShop ? '#1a1e33' : 'var(--color-accent)'; 
     
     // 1. Explicitly check if it's a non-empty string (most robust check for name)
     const hasOwnerName = typeof shop.owner_name === 'string' && shop.owner_name.trim().length > 0;
@@ -266,7 +266,7 @@ export const ShopGroupCard: React.FC<ShopGroupCardProps> = ({ shop }) => {
     // The return statement MUST use the variable defined above it.
     return (
         <div style={{
-            backgroundColor: 'rgba(15, 15, 15, 0.95)',
+            background: 'linear-gradient(#272a3d1a 0%,#272a3d66 100%)',
             border: `1px solid ${borderColor}`,
             borderRadius: '6px',
             marginBottom: '20px',
@@ -278,7 +278,7 @@ export const ShopGroupCard: React.FC<ShopGroupCardProps> = ({ shop }) => {
                 onClick={() => setExpanded(!expanded)}
                 style={{
                     padding: '16px 20px',
-                    backgroundColor: 'rgba(30, 30, 30, 0.8)',
+                    background: 'linear-gradient(#272a3d1a 0%,#272a3d66 100%)',
                     borderBottom: '1px solid #2a2a2a',
                     cursor: 'pointer',
                     display: 'flex',

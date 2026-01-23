@@ -23,29 +23,30 @@ const ServerAddressCard: React.FC<ServerAddressCardProps> = ({ type, address }) 
         >
             <div className="server-label">{type}</div>
             <div className="server-address">{address}</div>
-            <div className="server-copy-icon">{copied ? '✓' : '📋'}</div>
+            <div className="server-copy-icon">{copied ? '✓' : 'copy'}</div>
         </button>
     );
 };
 
 // --- Feature Card Component ---
-interface FeatureCardProps {
-    title: string;
-    description: string;
-    icon: string;
-}
+//interface FeatureCardProps {
+//    title: string;
+//    description: string;
+//    icon: string;
+//}
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) => (
-    <div className="feature-card">
-        <div className="feature-icon">{icon}</div>
-        <h3>{title}</h3>
-        <p>{description}</p>
-    </div>
-);
+// const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) => (
+//     <div className="feature-card">
+//         <div className="feature-icon">{icon}</div>
+//         <h3>{title}</h3>
+//         <p>{description}</p>
+//     </div>
+// );
 
 // --- Home Page Component ---
 const HomePage: React.FC = () => {
-    const [serverStatus, setServerStatus] = useState<{ online: boolean; players?: { online: number; max: number } }>({ online: false });
+    // const [serverStatus, setServerStatus] = useState<{ online: boolean; players?: { online: number; max: number } }>({ online: false });
+    const [, setServerStatus] = useState<{ online: boolean; players?: { online: number; max: number } }>({ online: false });
 
     useEffect(() => {
         setServerStatus({
@@ -63,8 +64,8 @@ const HomePage: React.FC = () => {
                 </div>
 
                 <div className="hero-content">
-                    <h1>The super cool server lol</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper</p>
+                    <h1>A Peaceful Vanilla World, Built to Last</h1>
+                    <p>A true vanilla survival server where peace is chosen, not enforced by claims. With a player-driven economy, strict moderation, and a calm community, this is a world made for long-term play. The server is still young. <br /> Join now and help shape its future from the beginning.</p>
 
                     <div className="server-cards">
                         <ServerAddressCard type="Java Edition" address="play.peacefulhaven.lol" />
@@ -74,7 +75,7 @@ const HomePage: React.FC = () => {
             </header>
 
             {/* FEATURES SECTION */}
-            <section className="features">
+            {/* <section className="features">
                 <div className="features-header">
                     <h2>Why Join <span className="accent">Peaceful Haven?</span></h2>
                     <div className="features-divider"></div>
@@ -97,12 +98,12 @@ const HomePage: React.FC = () => {
                         description="Play from any device with full Java and Bedrock support, seamlessly synchronized features, and a unified community experience."
                     />
                 </div>
-            </section>
+            </section> */}
 
             {/* FOOTER */}
-            <footer className="footer">
+            {/* <footer className="footer">
                 <p>Peaceful Haven SMP is not affiliated with or endorsed by Mojang, Microsoft, or Xbox Live.</p>
-            </footer>
+            </footer> */}
         </div>
     );
 };
