@@ -2,6 +2,7 @@
 import yaml
 from typing import List, Dict, Optional
 from ..config import get_settings
+from .nbt_parser import parse_nbt_enchantments, parse_nbt_container 
 
 settings = get_settings()
 
@@ -19,11 +20,28 @@ def parse_item_data(item_dict: Optional[Dict]) -> Optional[Dict]:
     }
     
     components = item_dict.get("components", {})
+    
     if components:
+        # 1. Custom Name and Lore (Existing Logic)
         if "minecraft:custom_name" in components:
             result["display_name"] = components["minecraft:custom_name"]
+        
         if "minecraft:lore" in components:
             result["lore"] = components["minecraft:lore"]
+
+        # 2. NEW: Enchantments
+        if "minecraft:enchantments" in components:
+            enchant_str = str(components["minecraft:enchantments"]) # Ensure it's a string
+            result["enchantments"] = parse_nbt_enchantments(enchant_str)
+        
+        # 3. NEW: Container Contents (Shulker Boxes)
+        if "minecraft:container" in components:
+            container_str = str(components["minecraft:container"])
+            # The parsed contents are raw item dictionaries
+            result["contents"] = parse_nbt_container(container_str)
+            result["is_container"] = True # Mark as container for frontend display
+
+        # 4. Custom Model Data
         if "minecraft:custom_model_data" in components:
             cmd = components["minecraft:custom_model_data"]
             if isinstance(cmd, dict) and "floats" in cmd:
