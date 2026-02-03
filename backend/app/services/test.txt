@@ -1,0 +1,89 @@
+inecraft-web  | INFO:     127.0.0.1:56362 - "GET /trades/available?skip=0&limit=500 HTTP/1.1" 200 OK
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:villager_spawn_egg: is_custom=False, display_name={color:"green",italic:0b,text:"Shopkeeper"}
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:elytra: is_custom=False, display_name=Elytra
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:diamond: is_custom=False, display_name=Diamond
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:elytra: is_custom=False, display_name=Elytra
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:netherite_scrap: is_custom=False, display_name=Netherite Scrap
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:elytra: is_custom=False, display_name=Elytra
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:firework_rocket: is_custom=False, display_name=Firework Rocket
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald_block: is_custom=False, display_name=Block of Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:dragon_head: is_custom=False, display_name=Dragon Head
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:dragon_head: is_custom=False, display_name=Dragon Head
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald_block: is_custom=False, display_name=Block of Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:shulker_shell: is_custom=False, display_name=Shulker Shell
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:shulker_shell: is_custom=False, display_name=Shulker Shell
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald_block: is_custom=False, display_name=Block of Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:spire_armor_trim_smithing_template: is_custom=False, display_name=Spire Armor Trim Smithing Template
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:spire_armor_trim_smithing_template: is_custom=False, display_name=Spire Armor Trim Smithing Template
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald_block: is_custom=False, display_name=Block of Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:diamond_horse_armor: is_custom=False, display_name=Diamond Horse Armor
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald_block: is_custom=False, display_name=Block of Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:saddle: is_custom=False, display_name=Saddle
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:cooked_chicken: is_custom=False, display_name=Cooked Chicken
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:diamond: is_custom=False, display_name=Diamond
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:iron_ingot: is_custom=False, display_name=Iron Ingot
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:axolotl_bucket: is_custom=False, display_name="???"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:diamond: is_custom=False, display_name=Diamond
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:axolotl_bucket: is_custom=False, display_name="???"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:diamond: is_custom=False, display_name=Diamond
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:axolotl_bucket: is_custom=False, display_name="???"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:diamond: is_custom=False, display_name=Diamond
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:axolotl_bucket: is_custom=False, display_name="???"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:diamond: is_custom=False, display_name=Diamond
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:potion: is_custom=False, display_name=Water Bottle
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald_block: is_custom=False, display_name=Block of Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:potion: is_custom=False, display_name=Water Bottle
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald_block: is_custom=False, display_name=Block of Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:totem_of_undying: is_custom=False, display_name=Totem of Undying
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:diamond: is_custom=False, display_name=Diamond
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:nether_star: is_custom=False, display_name=Nether Star
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:string: is_custom=False, display_name=String
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:wither_skeleton_skull: is_custom=False, display_name=Wither Skeleton Skull
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:music_disc_creator: is_custom=False, display_name=Music Disc Creator
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:music_disc_precipice: is_custom=False, display_name=Music Disc Precipice
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:music_disc_tears: is_custom=False, display_name=Music Disc Tears
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:music_disc_otherside: is_custom=False, display_name=Music Disc (Lena Raine - otherside)
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:music_disc_cat: is_custom=False, display_name=Music Disc (C418 - cat)
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:echo_shard: is_custom=False, display_name=Echo Shard
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:sea_lantern: is_custom=False, display_name=Sea Lantern
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:dark_prismarine: is_custom=False, display_name=Dark Prismarine
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:prismarine_bricks: is_custom=False, display_name=Prismarine Bricks
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:prismarine: is_custom=False, display_name=Prismarine
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:pitcher_plant: is_custom=False, display_name=Pitcher Plant
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:torchflower: is_custom=False, display_name=Torchflower
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:sniffer_egg: is_custom=False, display_name=Sniffer Egg
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald_block: is_custom=False, display_name=Block of Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:shulker_shell: is_custom=False, display_name=Shulker Shell
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:diamond: is_custom=False, display_name=Diamond
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:blue_banner: is_custom=False, display_name="Finland"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:white_banner: is_custom=False, display_name="Japan"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:red_banner: is_custom=False, display_name="Switzerland"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:white_banner: is_custom=False, display_name="Fr*nce"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:black_banner: is_custom=False, display_name="Estonia"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:white_banner: is_custom=False, display_name="Denmark"
+minecraft-web  | FINAL ENRICHED DATA FOR minecraft:emerald: is_custom=False, display_name=Emerald
+minecraft-web  | INFO:     127.0.0.1:56366 - "GET /trades/available?skip=0&limit=500 HTTP/1.1" 200 OK

@@ -1,0 +1,10 @@
+name: WebPerks
+version: 1.0.0
+main: lol.peacefulhaven.perks.WebPerks
+api-version: 1.18
+depend: [Shopkeepers, LuckPerms] # Dependencies for core functionality
+commands:
+  webperks:
+    description: Executes commands for the web automation system.
+    usage: /webperks <command>
+    permission: webperks.admin

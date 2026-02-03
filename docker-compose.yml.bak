@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./backend
+    container_name: minecraft-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      # Mount Minecraft directories (UPDATE PATHS!)
+      - /home/opc/minecraft/plugins/Shopkeepers:/minecraft/shopkeepers:ro
+      - /home/opc/minecraft/plugins/YourPlaytimePlugin:/minecraft/playtime:ro
+      - /home/opc/minecraft/usercache.json:/minecraft/usercache.json:ro
+      
+      # Website database
+      - website-db:/app/data
+      
+      # Mount backend code for development (remove in production)
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    networks:
+      - minecraft-web-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  website-db:
+    driver: local
+
+networks:
+  minecraft-web-network:
+    driver: bridge

@@ -1,0 +1,17 @@
+[
+  {
+    "shop_uuid": "a15077a8-59f4-4d52-b673-28d1cace36f2",
+    "trade_id": "1",
+    "stock_remaining": 128
+  },
+  {
+    "shop_uuid": "a15077a8-59f4-4d52-b673-28d1cace36f2",
+    "trade_id": "2",
+    "stock_remaining": 0
+  },
+  {
+    "shop_uuid": "be0d7c61-1524-4f18-9b92-a5932564979c",
+    "trade_id": "1",
+    "stock_remaining": 9999
+  }
+]

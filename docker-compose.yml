@@ -1,0 +1,42 @@
+services:
+  web:
+    build: ./backend
+    container_name: minecraft-web
+    restart: unless-stopped
+    network_mode: "host" 
+    #ports:
+    #   - "127.0.0.1:8000:8000"
+    volumes:
+      # Shopkeepers data: The active shops are in this YAML file
+      - /home/opc/PaperServer/plugins/Shopkeepers/data/save.yml:/minecraft/shopkeepers/data/save.yml:ro
+      # Shopkeepers trades logs DB: This path seems fine already if it's the directory
+      - /home/opc/PaperServer/plugins/Shopkeepers:/minecraft/shopkeepers:ro 
+      # Ban lists: Located in the server root
+      - /home/opc/PaperServer/banned-players.json:/minecraft/banned-players.json:ro
+      - /home/opc/PaperServer/banned-ips.json:/minecraft/banned-ips.json:ro
+      # User cache (already mounted)
+      - /home/opc/PaperServer/usercache.json:/minecraft/usercache.json:ro
+      # website-db (already mounted)
+      - website-db:/app/data
+       # This is the central hub for command queue and stock file.
+      - /home/opc/PaperServer/plugins/WebPerks:/minecraft/automation:rw
+      # MinecraftStats data directory
+      - /var/www/MinecraftStatsWeb/data:/minecraft/mcstats/data:ro
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    #networks:
+    #  - minecraft-web-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  website-db:
+    driver: local
+
+#networks:
+#  minecraft-web-network:
+#    driver: bridge

@@ -1,0 +1,54 @@
+// custom-plugin/build.gradle (FINAL FIXED CONFIGURATION)
+
+plugins {
+    id 'java'
+}
+
+group 'lol.peacefulhaven.perks'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    
+    // 1. ADD THE SERVER PLUGINS FOLDER AS A REPOSITORY
+    maven { url = '/home/opc/PaperServer/plugins' } 
+}
+
+dependencies {
+    // Paper API (CRITICAL: Version remains the same)
+    compileOnly "io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT" 
+
+    // 2. DEPENDENCY FIX: Reference the EXACT file name of your plugin JAR
+    // You have: Shopkeepers-2.25.0.jar
+    // This assumes the JAR is copied to the server plugins folder.
+    compileOnly files('/home/opc/PaperServer/plugins/Shopkeepers-2.25.0.jar')
+    
+    // We can also try the Maven coordinates and hope the local repository works:
+    // compileOnly 'com.nisovin.shopkeepers:shopkeepers-api:2.25.0' // Now using 2.25.0
+
+    // Gson remains the same
+    implementation "com.google.code.gson:gson:2.10.1" 
+}
+
+java {
+    // FIX 1: Match project Java target to the dependency requirement (Java 21)
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+// Task to create the final JAR file
+jar {
+    archiveFileName = 'WebPerks.jar'
+    // Include Gson dependency inside the JAR (Shading/Relocation)
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+// Task to copy the JAR to the server's plugins folder
+task copyPlugin(type: Copy) {
+    dependsOn(jar)
+    from(jar)
+    into('/home/opc/PaperServer/plugins') 
+}
